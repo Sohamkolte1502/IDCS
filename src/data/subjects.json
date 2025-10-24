@@ -1,0 +1,26 @@
+[
+  {
+    "subjectId": "CS701",
+    "subjectName": "Advanced Algorithms",
+    "credits": 4,
+    "department": "Computer Science",
+    "semester": 7,
+    "teacher": "Dr. Smith"
+  },
+  {
+    "subjectId": "CS702",
+    "subjectName": "Machine Learning",
+    "credits": 4,
+    "department": "Computer Science",
+    "semester": 7,
+    "teacher": "Dr. Smith"
+  },
+  {
+    "subjectId": "CS703",
+    "subjectName": "Database Systems",
+    "credits": 3,
+    "department": "Computer Science",
+    "semester": 7,
+    "teacher": "Dr. Wilson"
+  }
+]

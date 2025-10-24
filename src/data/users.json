@@ -1,0 +1,53 @@
+[
+  {
+    "id": "user1",
+    "email": "admin@dypatil.edu",
+    "password": "admin123",
+    "role": "admin",
+    "name": "System Administrator",
+    "department": "IT"
+  },
+  {
+    "id": "user2",
+    "email": "student1@students.dypatil.edu",
+    "password": "student123",
+    "role": "student",
+    "name": "John Doe",
+    "department": "Computer Science"
+  },
+  {
+    "id": "user3",
+    "email": "teacher1@dypatil.edu",
+    "password": "teacher123",
+    "role": "teacher",
+    "name": "Dr. Smith",
+    "department": "Computer Science",
+    "roles": ["SubjectTeacher", "Mentor"]
+  },
+  {
+    "id": "user4",
+    "email": "hod@dypatil.edu",
+    "password": "hod123",
+    "role": "hod",
+    "name": "Prof. Johnson",
+    "department": "Computer Science",
+    "roles": ["HOD"]
+  },
+  {
+    "id": "user5",
+    "email": "counsellor@dypatil.edu",
+    "password": "counsellor123",
+    "role": "teacher",
+    "name": "Dr. Brown",
+    "department": "Computer Science",
+    "roles": ["ClassCounsellor"]
+  },
+  {
+    "id": "user6",
+    "email": "office@idcs.dypatil.edu",
+    "password": "office123",
+    "role": "office",
+    "name": "Office Staff",
+    "department": "Administration"
+  }
+]

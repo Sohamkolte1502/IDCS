@@ -1,0 +1,67 @@
+[
+  {
+    "id": "student1",
+    "name": "John Doe",
+    "rollNo": "CS001",
+    "USN": "1DY20CS001",
+    "email": "student1@students.dypatil.edu",
+    "contact": "9876543210",
+    "deptId": "CS",
+    "year": 2024,
+    "sem": 7,
+    "divId": "A",
+    "batchId": "2020",
+    "subjects": [
+      {
+        "subjectId": "CS701",
+        "subjectName": "Advanced Algorithms",
+        "credits": 4
+      },
+      {
+        "subjectId": "CS702",
+        "subjectName": "Machine Learning",
+        "credits": 4
+      },
+      {
+        "subjectId": "CS703",
+        "subjectName": "Database Systems",
+        "credits": 3
+      }
+    ],
+    "miniProject": {
+      "title": "AI-Powered Learning Management System",
+      "supervisor": "Dr. Smith",
+      "status": "pending"
+    }
+  },
+  {
+    "id": "student2",
+    "name": "Jane Smith",
+    "rollNo": "CS002",
+    "USN": "1DY20CS002",
+    "email": "student2@students.dypatil.edu",
+    "contact": "9876543211",
+    "deptId": "CS",
+    "year": 2024,
+    "sem": 7,
+    "divId": "A",
+    "batchId": "2020",
+    "subjects": [
+      {
+        "subjectId": "CS701",
+        "subjectName": "Advanced Algorithms",
+        "credits": 4
+      },
+      {
+        "subjectId": "CS702",
+        "subjectName": "Machine Learning",
+        "credits": 4
+      }
+    ],
+    "miniProject": {
+      "title": "Blockchain-based Voting System",
+      "supervisor": "Dr. Wilson",
+      "status": "pending"
+    }
+  }
+]

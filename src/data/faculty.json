@@ -1,0 +1,55 @@
+[
+  {
+    "id": "faculty1",
+    "name": "Dr. Smith",
+    "email": "teacher1@dypatil.edu",
+    "department": "Computer Science",
+    "roles": ["SubjectTeacher", "Mentor"],
+    "subjects": [
+      {
+        "subjectId": "CS701",
+        "subjectName": "Advanced Algorithms",
+        "credits": 4
+      },
+      {
+        "subjectId": "CS702",
+        "subjectName": "Machine Learning",
+        "credits": 4
+      }
+    ],
+    "mentees": ["student1", "student2"]
+  },
+  {
+    "id": "faculty2",
+    "name": "Dr. Brown",
+    "email": "counsellor@dypatil.edu",
+    "department": "Computer Science",
+    "roles": ["ClassCounsellor"],
+    "subjects": [],
+    "counselledDivisions": ["A", "B"]
+  },
+  {
+    "id": "faculty3",
+    "name": "Prof. Johnson",
+    "email": "hod@dypatil.edu",
+    "department": "Computer Science",
+    "roles": ["HOD"],
+    "subjects": [],
+    "departmentId": "CS"
+  },
+  {
+    "id": "faculty4",
+    "name": "Dr. Wilson",
+    "email": "teacher2@dypatil.edu",
+    "department": "Computer Science",
+    "roles": ["SubjectTeacher"],
+    "subjects": [
+      {
+        "subjectId": "CS703",
+        "subjectName": "Database Systems",
+        "credits": 3
+      }
+    ],
+    "mentees": []
+  }
+]

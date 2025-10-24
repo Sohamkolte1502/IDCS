@@ -1,0 +1,119 @@
+[
+  {
+    "id": "approval1",
+    "studentId": "student1",
+    "studentName": "John Doe",
+    "rollNo": "CS001",
+    "USN": "1DY20CS001",
+    "subjectApprovals": [
+      {
+        "subjectId": "CS701",
+        "subjectName": "Advanced Algorithms",
+        "teacherId": "faculty1",
+        "teacherName": "Dr. Smith",
+        "status": "pending",
+        "timestamp": null,
+        "lmsActivity": false
+      },
+      {
+        "subjectId": "CS702",
+        "subjectName": "Machine Learning",
+        "teacherId": "faculty1",
+        "teacherName": "Dr. Smith",
+        "status": "pending",
+        "timestamp": null,
+        "lmsActivity": false
+      },
+      {
+        "subjectId": "CS703",
+        "subjectName": "Database Systems",
+        "teacherId": "faculty4",
+        "teacherName": "Dr. Wilson",
+        "status": "pending",
+        "timestamp": null,
+        "lmsActivity": false
+      }
+    ],
+    "miniProjectApproval": {
+      "status": "pending",
+      "supervisorId": "faculty1",
+      "supervisorName": "Dr. Smith",
+      "timestamp": null
+    },
+    "mentorApproval": {
+      "status": "pending",
+      "mentorId": "faculty1",
+      "mentorName": "Dr. Smith",
+      "timestamp": null
+    },
+    "counsellorApproval": {
+      "status": "pending",
+      "counsellorId": "faculty2",
+      "counsellorName": "Dr. Brown",
+      "timestamp": null
+    },
+    "hodApproval": {
+      "status": "pending",
+      "hodId": "faculty3",
+      "hodName": "Prof. Johnson",
+      "timestamp": null
+    },
+    "slipGenerated": false,
+    "hallTicketDistributed": false,
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": "approval2",
+    "studentId": "student2",
+    "studentName": "Jane Smith",
+    "rollNo": "CS002",
+    "USN": "1DY20CS002",
+    "subjectApprovals": [
+      {
+        "subjectId": "CS701",
+        "subjectName": "Advanced Algorithms",
+        "teacherId": "faculty1",
+        "teacherName": "Dr. Smith",
+        "status": "pending",
+        "timestamp": null,
+        "lmsActivity": false
+      },
+      {
+        "subjectId": "CS702",
+        "subjectName": "Machine Learning",
+        "teacherId": "faculty1",
+        "teacherName": "Dr. Smith",
+        "status": "pending",
+        "timestamp": null,
+        "lmsActivity": false
+      }
+    ],
+    "miniProjectApproval": {
+      "status": "pending",
+      "supervisorId": "faculty4",
+      "supervisorName": "Dr. Wilson",
+      "timestamp": null
+    },
+    "mentorApproval": {
+      "status": "pending",
+      "mentorId": "faculty1",
+      "mentorName": "Dr. Smith",
+      "timestamp": null
+    },
+    "counsellorApproval": {
+      "status": "pending",
+      "counsellorId": "faculty2",
+      "counsellorName": "Dr. Brown",
+      "timestamp": null
+    },
+    "hodApproval": {
+      "status": "pending",
+      "hodId": "faculty3",
+      "hodName": "Prof. Johnson",
+      "timestamp": null
+    },
+    "slipGenerated": false,
+    "hallTicketDistributed": false,
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+]
