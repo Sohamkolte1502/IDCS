@@ -24,6 +24,7 @@ const Sidebar = () => {
     { path: '/hod/approvals', label: 'Final Approvals', icon: '✅' },
     { path: '/hod/history', label: 'Approval History', icon: '📊' }
   ];
+  
 
   const getAdminNavItems = () => [
     { path: '/admin', label: 'Dashboard', icon: '/dashboard.svg' },
