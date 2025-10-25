@@ -158,13 +158,13 @@ const OfficeInterface = () => {
 
       <div className="office-content">
         {/* Header */}
-        <div className="office-header">
+        {/* <div className="office-header">
           <h1>Office Interface</h1>
           <div className="office-user-info">
             <span>Welcome, {user.name}</span>
             <button className="logout-btn">Logout</button>
           </div>
-        </div>
+        </div> */}
 
         {/* Overview Section */}
         {activeSection === 'overview' && (

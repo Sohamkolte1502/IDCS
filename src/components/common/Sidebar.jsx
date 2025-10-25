@@ -7,9 +7,9 @@ const Sidebar = () => {
   const location = useLocation();
 
   const getStudentNavItems = () => [
-    { path: '/student', label: 'Dashboard', icon: '🏠' },
-    { path: '/student/profile', label: 'Profile', icon: '👤' },
-    { path: '/student/slip', label: 'Generate Slip', icon: '📄' }
+    { path: '/student', label: 'Dashboard', icon: '/dashboard.svg' },
+    { path: '/student/profile', label: 'Profile', icon: '/profile.svg' },
+    { path: '/student/slip', label: 'Generate Slip', icon: '/slip.svg' }
   ];
 
   const getFacultyNavItems = () => [
@@ -35,9 +35,9 @@ const Sidebar = () => {
   ];
 
   const getOfficeNavItems = () => [
-    { path: '/office', label: 'Dashboard', icon: '🏠' },
-    { path: '/office/search', label: 'Search Students', icon: '🔍' },
-    { path: '/office/tickets', label: 'Hall Tickets', icon: '🎫' }
+    { path: '/office', label: 'Dashboard', icon: '/dashboard.svg' },
+    { path: '/office/search', label: 'Search Students', icon: '/search.svg' },
+    { path: '/office/tickets', label: 'Hall Tickets', icon: '/hallticket.svg' }
   ];
 
   const getNavItems = () => {

@@ -35,7 +35,7 @@ const StudentManagement = ({
       {!collapsedSections['lifecycle'] && (
         <div className="section-content">
           {/* Promote Students */}
-          <div className="lifecycle-section">
+          {/* <div className="lifecycle-section">
             <h3>Promote Students</h3>
             <button 
               className="promote-btn"
@@ -43,10 +43,10 @@ const StudentManagement = ({
             >
               Promote All Students (Year + Sem ↑)
             </button>
-          </div>
+          </div> */}
 
           {/* Archive/Delete Students */}
-          <div className="lifecycle-section">
+          {/* <div className="lifecycle-section">
             <h3>Archive / Delete Students</h3>
             <div className="archive-table">
               <table>
@@ -83,7 +83,7 @@ const StudentManagement = ({
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
 
           {/* Faculty Reassignment */}
           <div className="lifecycle-section">

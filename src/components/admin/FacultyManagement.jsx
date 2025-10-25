@@ -13,6 +13,8 @@ const FacultyManagement = ({
 }) => {
   const [collapsedSections, setCollapsedSections] = useState({});
   const [editModes, setEditModes] = useState({});
+  const [searchRollNo, setSearchRollNo] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const toggleSection = (sectionName) => {
     setCollapsedSections(prev => ({
@@ -27,6 +29,24 @@ const FacultyManagement = ({
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+  const handleSearchStudent = () => {
+    if (searchRollNo.trim()) {
+      const foundStudents = students.filter(student => 
+        student.rollNo.toLowerCase().includes(searchRollNo.toLowerCase())
+      );
+      setSearchResults(foundStudents);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const getFilteredStudents = () => {
+    if (searchResults.length > 0) {
+      return searchResults;
+    }
+    return students;
   };
 
   return (
@@ -96,6 +116,51 @@ const FacultyManagement = ({
           {/* Subject Remapping */}
           <div className="mapping-section">
             <h3>Change Subjects in Slip</h3>
+            
+            {/* Search Bar */}
+            <div className="search-section">
+              <h4>Search Student by Roll Number</h4>
+              <div className="search-controls">
+                <input
+                  type="text"
+                  placeholder="Enter Student Roll Number..."
+                  value={searchRollNo}
+                  onChange={(e) => setSearchRollNo(e.target.value)}
+                  className="search-input"
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearchStudent()}
+                />
+                <button 
+                  className="search-btn"
+                  onClick={handleSearchStudent}
+                >
+                  Search
+                </button>
+                {searchRollNo && (
+                  <button 
+                    className="clear-btn"
+                    onClick={() => {
+                      setSearchRollNo('');
+                      setSearchResults([]);
+                    }}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              
+              {searchResults.length > 0 && (
+                <div className="search-results">
+                  <p>Found {searchResults.length} student(s) matching "{searchRollNo}"</p>
+                </div>
+              )}
+              
+              {searchResults.length === 0 && searchRollNo && (
+                <div className="no-results">
+                  <p>No students found with roll number: {searchRollNo}</p>
+                </div>
+              )}
+            </div>
+            
             <div className="subject-remapping">
               <table>
                 <thead>
@@ -107,7 +172,7 @@ const FacultyManagement = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map(s => (
+                  {getFilteredStudents().map(s => (
                     <tr key={s.id}>
                       <td>{s.name} ({s.rollNo})</td>
                       <td>

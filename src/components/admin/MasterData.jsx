@@ -24,12 +24,31 @@ const MasterData = ({ uploadHistory, handleFileUpload, loading }) => {
       
       {!collapsedSections['data-ingestion'] && (
         <div className="section-content">
+          
+          <div className="upload-section">
+            <h3>Upload Load Allocation Data</h3>
+            <div className="upload-area" onClick={() => document.getElementById('subjects-input').click()}>
+              <div className="upload-icon"></div>
+              <h4>Upload Load Allocation Data Only</h4>
+              <p>Click to select CSV/Excel file</p>
+              <input
+                id="subjects-input"
+                type="file"
+                className="file-input"
+                onChange={(e) => handleFileUpload(e, 'Subjects')}
+                accept=".csv,.xlsx"
+              />
+            </div>
+            <button className="upload-button" onClick={() => document.getElementById('subjects-input').click()}>
+              Choose File
+            </button>
+          </div>
           {/* Upload Teachers */}
           <div className="upload-section">
             <h3>Upload Teachers</h3>
             <div className="upload-area" onClick={() => document.getElementById('teachers-input').click()}>
-              <div className="upload-icon">👨‍🏫</div>
-              <h4>Upload Faculty Data</h4>
+              <div className="upload-icon"></div>
+              <h4>Upload Faculty Data Only</h4>
               <p>Click to select CSV/Excel file</p>
               <input
                 id="teachers-input"
@@ -44,12 +63,14 @@ const MasterData = ({ uploadHistory, handleFileUpload, loading }) => {
             </button>
           </div>
 
+
+
           {/* Upload Students */}
           <div className="upload-section">
             <h3>Upload Students</h3>
             <div className="upload-area" onClick={() => document.getElementById('students-input').click()}>
-              <div className="upload-icon">🎓</div>
-              <h4>Upload Student Data</h4>
+              <div className="upload-icon"></div>
+              <h4>Upload Student Data Only</h4>
               <p>Click to select CSV/Excel file</p>
               <input
                 id="students-input"
@@ -64,12 +85,12 @@ const MasterData = ({ uploadHistory, handleFileUpload, loading }) => {
             </button>
           </div>
 
-          {/* Upload Subjects */}
+         
           <div className="upload-section">
             <h3>Upload Subjects</h3>
             <div className="upload-area" onClick={() => document.getElementById('subjects-input').click()}>
-              <div className="upload-icon">📚</div>
-              <h4>Upload Subject Data</h4>
+              <div className="upload-icon"></div>
+              <h4>Upload Subject Data Only</h4>
               <p>Click to select CSV/Excel file</p>
               <input
                 id="subjects-input"
@@ -83,6 +104,26 @@ const MasterData = ({ uploadHistory, handleFileUpload, loading }) => {
               Choose File
             </button>
           </div>
+          {/* Upload Subjects */}
+          <div className="upload-section">
+            <h3>Upload Mini Project Data</h3>
+            <div className="upload-area" onClick={() => document.getElementById('subjects-input').click()}>
+              <div className="upload-icon"></div>
+              <h4>Upload Mini Projects Data Only</h4>
+              <p>Click to select CSV/Excel file</p>
+              <input
+                id="subjects-input"
+                type="file"
+                className="file-input"
+                onChange={(e) => handleFileUpload(e, 'Subjects')}
+                accept=".csv,.xlsx"
+              />
+            </div>
+            <button className="upload-button" onClick={() => document.getElementById('subjects-input').click()}>
+              Choose File
+            </button>
+          </div>
+
 
           {/* Upload History */}
           <div className="upload-history">
