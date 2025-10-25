@@ -123,11 +123,11 @@ const StudentDashboard = () => {
       <div className="student-content">
         {/* Header */}
         <div className="student-header">
-          <h1>Student Dashboard</h1>
-          <div className="student-user-info">
+          {/* <h1>Student Dashboard</h1> */}
+          {/* <div className="student-user-info">
             <span>Welcome, {user.name}</span>
             <button className="logout-btn">Logout</button>
-          </div>
+          </div> */}
         </div>
 
         {/* Overview Section */}

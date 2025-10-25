@@ -5,6 +5,8 @@ import Header from './components/common/Header';
 import Sidebar from './components/common/Sidebar';
 import Login from './pages/Login';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentProfile from './pages/StudentProfile';
+import StudentSlip from './pages/StudentSlip';
 import FacultyDashboard from './pages/FacultyDashboard';
 import HODDashboard from './pages/HODDashboard';
 import HODApprovals from './pages/HODApprovals';
@@ -82,8 +84,8 @@ const AppRoutes = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<StudentDashboard />} />
-              <Route path="/profile" element={<StudentDashboard />} />
-              <Route path="/slip" element={<StudentDashboard />} />
+              <Route path="/profile" element={<StudentProfile />} />
+              <Route path="/slip" element={<StudentSlip />} />
             </Routes>
           </Layout>
         </ProtectedRoute>
