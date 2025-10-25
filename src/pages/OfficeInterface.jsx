@@ -12,6 +12,7 @@ const OfficeInterface = () => {
   const [searchType, setSearchType] = useState('rollNo');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState('overview');
   const [stats, setStats] = useState({
     totalStudents: 0,
     approvedSlips: 0,
@@ -122,53 +123,104 @@ const OfficeInterface = () => {
 
   return (
     <div className="office-dashboard">
+      {/* Sidebar Navigation */}
+      <div className="office-sidebar">
+        <div className="sidebar-header">
+          <h2>Office Interface</h2>
+        </div>
+        <nav className="sidebar-nav">
+          <button 
+            className={`nav-item ${activeSection === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveSection('overview')}
+          >
+            📊 Overview
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'search' ? 'active' : ''}`}
+            onClick={() => setActiveSection('search')}
+          >
+            🔍 Student Search
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'tickets' ? 'active' : ''}`}
+            onClick={() => setActiveSection('tickets')}
+          >
+            🎫 Ticket Management
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'reports' ? 'active' : ''}`}
+            onClick={() => setActiveSection('reports')}
+          >
+            📈 Reports
+          </button>
+        </nav>
+      </div>
+
       <div className="office-content">
-        {/* Office Profile */}
-        <div className="office-profile">
-          <div className="profile-header">
-            <div className="profile-avatar">
-              {getInitials(user.name)}
-            </div>
-            <div className="profile-info">
-              <h2>{user.name}</h2>
-              <p>{user.email}</p>
-            </div>
+        {/* Header */}
+        <div className="office-header">
+          <h1>Office Interface</h1>
+          <div className="office-user-info">
+            <span>Welcome, {user.name}</span>
+            <button className="logout-btn">Logout</button>
           </div>
         </div>
 
-        {/* Stats Overview */}
-        <div className="office-stats">
-          <div className="stat-card">
-            <div className="stat-icon">🎓</div>
-            <div className="stat-value">{stats.totalStudents}</div>
-            <div className="stat-label">Total Students</div>
+        {/* Overview Section */}
+        {activeSection === 'overview' && (
+          <div className="section">
+            {/* Office Profile */}
+            <div className="office-profile">
+              <div className="profile-header">
+                <div className="profile-avatar">
+                  {getInitials(user.name)}
+                </div>
+                <div className="profile-info">
+                  <h2>{user.name}</h2>
+                  <p>{user.email}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Overview */}
+            <div className="office-stats">
+              <div className="stat-card">
+                <div className="stat-icon">🎓</div>
+                <div className="stat-value">{stats.totalStudents}</div>
+                <div className="stat-label">Total Students</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">✅</div>
+                <div className="stat-value">{stats.approvedSlips}</div>
+                <div className="stat-label">Approved Slips</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">🎫</div>
+                <div className="stat-value">{stats.distributedTickets}</div>
+                <div className="stat-label">Tickets Distributed</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">⏳</div>
+                <div className="stat-value">{stats.pendingDistribution}</div>
+                <div className="stat-label">Pending Distribution</div>
+              </div>
+            </div>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">✅</div>
-            <div className="stat-value">{stats.approvedSlips}</div>
-            <div className="stat-label">Approved Slips</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">🎫</div>
-            <div className="stat-value">{stats.distributedTickets}</div>
-            <div className="stat-label">Tickets Distributed</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">⏳</div>
-            <div className="stat-value">{stats.pendingDistribution}</div>
-            <div className="stat-label">Pending Distribution</div>
-          </div>
-        </div>
+        )}
 
         {/* Search Section */}
-        <div className="search-section">
-          <div className="search-header">
-            <div className="search-icon">🔍</div>
-            <div>
-              <h3 className="search-title">Student Search</h3>
-              <p className="search-subtitle">Search and issue hall tickets</p>
-            </div>
-          </div>
+        {activeSection === 'search' && (
+          <div className="section">
+
+            {/* Search Section */}
+            <div className="search-section">
+              <div className="search-header">
+                <div className="search-icon">🔍</div>
+                <div>
+                  <h3 className="search-title">Student Search</h3>
+                  <p className="search-subtitle">Search and issue hall tickets</p>
+                </div>
+              </div>
           
           <div className="search-form">
             <input
@@ -351,14 +403,51 @@ const OfficeInterface = () => {
             </div>
           )}
 
-          {searchResults.length === 0 && searchTerm && !loading && (
-            <div className="no-results">
-              <div className="no-results-icon">🔍</div>
-              <h3>No students found</h3>
-              <p>Try searching with a different term or search type.</p>
+              {searchResults.length === 0 && searchTerm && !loading && (
+                <div className="no-results">
+                  <div className="no-results-icon">🔍</div>
+                  <h3>No students found</h3>
+                  <p>Try searching with a different term or search type.</p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* Tickets Section */}
+        {activeSection === 'tickets' && (
+          <div className="section">
+            <h2>Ticket Management</h2>
+            <div className="tickets-overview">
+              <div className="ticket-stats">
+                <div className="ticket-stat">
+                  <h3>Pending Distribution</h3>
+                  <p>{stats.pendingDistribution} tickets</p>
+                </div>
+                <div className="ticket-stat">
+                  <h3>Distributed Today</h3>
+                  <p>{stats.distributedTickets} tickets</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Reports Section */}
+        {activeSection === 'reports' && (
+          <div className="section">
+            <h2>Office Reports</h2>
+            <div className="reports-grid">
+              <div className="report-card">
+                <h3>Distribution Statistics</h3>
+                <p>Total Students: {stats.totalStudents}</p>
+                <p>Approved Slips: {stats.approvedSlips}</p>
+                <p>Distributed Tickets: {stats.distributedTickets}</p>
+                <p>Pending Distribution: {stats.pendingDistribution}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

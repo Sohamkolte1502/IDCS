@@ -1,26 +1,76 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/common/Card';
 import ApprovalBadge from '../components/common/ApprovalBadge';
+import Dashboard from '../components/admin/Dashboard';
+import MasterData from '../components/admin/MasterData';
+import FacultyManagement from '../components/admin/FacultyManagement';
+import StudentManagement from '../components/admin/StudentManagement';
+import DataSync from '../components/admin/DataSync';
 import studentsData from '../data/students.json';
 import facultyData from '../data/faculty.json';
+import subjectsData from '../data/subjects.json';
+import departmentsData from '../data/departments.json';
+import batchesData from '../data/batches.json';
+import miniProjectsData from '../data/miniProjects.json';
 import approvalsData from '../data/approvals.json';
 import '../styles/admin.css';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
+  const location = useLocation();
+  
+  // Determine current section based on URL
+  const getCurrentSection = () => {
+    const path = location.pathname;
+    if (path === '/admin' || path === '/admin/') return 'dashboard';
+    if (path === '/admin/master-data') return 'master-data';
+    if (path === '/admin/faculty') return 'faculty-management';
+    if (path === '/admin/students') return 'student-management';
+    if (path === '/admin/sync') return 'data-sync';
+    return 'dashboard';
+  };
+
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalFaculty: 0,
     pendingApprovals: 0,
-    completedApprovals: 0
+    completedApprovals: 0,
+    activeUsers: 0,
+    unallocatedSubjects: 0
   });
   const [faculty, setFaculty] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [batches, setBatches] = useState([]);
+  const [miniProjects, setMiniProjects] = useState([]);
   const [approvals, setApprovals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('overview');
+  const [collapsedSections, setCollapsedSections] = useState({});
+  const [editModes, setEditModes] = useState({});
+  const [uploadHistory, setUploadHistory] = useState([]);
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [filteredApprovals, setFilteredApprovals] = useState([]);
+  const [filters, setFilters] = useState({
+    status: 'all',
+    department: 'all',
+    division: 'all',
+    year: 'all'
+  });
 
   useEffect(() => {
+    // Initialize data
+    setFaculty(facultyData);
+    setStudents(studentsData);
+    setSubjects(subjectsData);
+    setDepartments(departmentsData);
+    setBatches(batchesData);
+    setMiniProjects(miniProjectsData);
+    setApprovals(approvalsData);
+    setFilteredApprovals(approvalsData);
+    
     // Calculate stats
     const totalStudents = studentsData.length;
     const totalFaculty = facultyData.length;
@@ -30,20 +80,92 @@ const AdminDashboard = () => {
     const completedApprovals = approvalsData.filter(a => 
       a.hodApproval.status === 'approved'
     ).length;
+    const activeUsers = totalStudents + totalFaculty;
+    const unallocatedSubjects = subjectsData.filter(s => !s.teacher).length;
 
     setStats({
       totalStudents,
       totalFaculty,
       pendingApprovals,
-      completedApprovals
+      completedApprovals,
+      activeUsers,
+      unallocatedSubjects
     });
 
-    setFaculty(facultyData);
-    setApprovals(approvalsData);
+    // Initialize audit logs
+    const initialLogs = [
+      { id: 1, user: 'Admin', action: 'System initialized', timestamp: new Date().toISOString() },
+      { id: 2, user: 'Admin', action: 'Data loaded successfully', timestamp: new Date().toISOString() }
+    ];
+    setAuditLogs(initialLogs);
+    
     setLoading(false);
   }, []);
 
-  const handleFileUpload = async (event) => {
+  // Filter approvals based on current filters
+  useEffect(() => {
+    let filtered = approvals;
+    
+    if (filters.status !== 'all') {
+      filtered = filtered.filter(a => a.hodApproval.status === filters.status);
+    }
+    
+    if (filters.department !== 'all') {
+      filtered = filtered.filter(a => {
+        const student = students.find(s => s.id === a.studentId);
+        return student?.deptId === filters.department;
+      });
+    }
+    
+    if (filters.division !== 'all') {
+      filtered = filtered.filter(a => {
+        const student = students.find(s => s.id === a.studentId);
+        return student?.divId === filters.division;
+      });
+    }
+    
+    if (filters.year !== 'all') {
+      filtered = filtered.filter(a => {
+        const student = students.find(s => s.id === a.studentId);
+        return student?.year === parseInt(filters.year);
+      });
+    }
+    
+    setFilteredApprovals(filtered);
+  }, [filters, approvals, students]);
+
+  // Utility functions
+  const showToast = (message, type = 'success') => {
+    alert(`${type.toUpperCase()}: ${message}`);
+  };
+
+  const addAuditLog = (action) => {
+    const newLog = {
+      id: auditLogs.length + 1,
+      user: user.name,
+      action,
+      timestamp: new Date().toISOString()
+    };
+    setAuditLogs(prev => [newLog, ...prev]);
+  };
+
+  const toggleSection = (sectionName) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionName]: !prev[sectionName]
+    }));
+  };
+
+  const toggleEditMode = (tableName, id) => {
+    const key = `${tableName}-${id}`;
+    setEditModes(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
+  // File upload handlers
+  const handleFileUpload = async (event, dataType) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -52,17 +174,28 @@ const AdminDashboard = () => {
     // Simulate file processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    alert(`File "${file.name}" uploaded successfully!`);
+    // Add to upload history
+    const uploadEntry = {
+      id: uploadHistory.length + 1,
+      filename: file.name,
+      dataType,
+      timestamp: new Date().toISOString(),
+      status: 'success',
+      recordsProcessed: Math.floor(Math.random() * 100) + 10
+    };
+    setUploadHistory(prev => [uploadEntry, ...prev]);
+    
+    showToast(`File "${file.name}" uploaded successfully! ${uploadEntry.recordsProcessed} records processed.`);
+    addAuditLog(`Uploaded ${dataType} data from ${file.name}`);
     setLoading(false);
   };
 
+  // Data editing handlers
   const handleFacultyRoleUpdate = async (facultyId, role, checked) => {
     setLoading(true);
     
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Update faculty roles
     setFaculty(prev => prev.map(f => {
       if (f.id === facultyId) {
         const updatedRoles = checked 
@@ -74,7 +207,115 @@ const AdminDashboard = () => {
       return f;
     }));
     
+    addAuditLog(`Updated faculty roles for ${facultyId}`);
     setLoading(false);
+  };
+
+  const handleStudentSubjectUpdate = (studentId, subjectId, action) => {
+    setStudents(prev => prev.map(s => {
+      if (s.id === studentId) {
+        if (action === 'remove') {
+          return {
+            ...s,
+            subjects: s.subjects.filter(sub => sub.subjectId !== subjectId)
+          };
+        } else if (action === 'add') {
+          const newSubject = subjects.find(sub => sub.subjectId === subjectId);
+          if (newSubject && !s.subjects.find(sub => sub.subjectId === subjectId)) {
+            return {
+              ...s,
+              subjects: [...s.subjects, newSubject]
+            };
+          }
+        }
+      }
+      return s;
+    }));
+    addAuditLog(`Updated subjects for student ${studentId}`);
+  };
+
+  const handleFacultyReassignment = (studentId, newFacultyId) => {
+    setStudents(prev => prev.map(s => {
+      if (s.id === studentId) {
+        return { ...s, assignedFaculty: newFacultyId };
+      }
+      return s;
+    }));
+    addAuditLog(`Reassigned student ${studentId} to faculty ${newFacultyId}`);
+  };
+
+  const handleBatchTransfer = (studentId, newBatchId) => {
+    setStudents(prev => prev.map(s => {
+      if (s.id === studentId) {
+        return { ...s, batchId: newBatchId };
+      }
+      return s;
+    }));
+    addAuditLog(`Transferred student ${studentId} to batch ${newBatchId}`);
+  };
+
+  const handlePromoteStudents = () => {
+    if (window.confirm('Are you sure you want to promote all students to the next semester?')) {
+      setStudents(prev => prev.map(s => ({
+        ...s,
+        sem: s.sem < 8 ? s.sem + 1 : s.sem,
+        year: s.sem === 8 ? s.year + 1 : s.year
+      })));
+      showToast('All students promoted successfully!');
+      addAuditLog('Promoted all students to next semester');
+    }
+  };
+
+  const handleArchiveStudents = (studentId) => {
+    if (window.confirm('Are you sure you want to archive this student?')) {
+      setStudents(prev => prev.filter(s => s.id !== studentId));
+      showToast('Student archived successfully!');
+      addAuditLog(`Archived student ${studentId}`);
+    }
+  };
+
+  const handleUpdateHOD = (departmentId, newHODId) => {
+    setDepartments(prev => prev.map(d => {
+      if (d.deptId === departmentId) {
+        const newHOD = faculty.find(f => f.id === newHODId);
+        return {
+          ...d,
+          hodId: newHODId,
+          hodName: newHOD?.name || 'Unknown'
+        };
+      }
+      return d;
+    }));
+    showToast('HOD updated successfully!');
+    addAuditLog(`Updated HOD for department ${departmentId}`);
+  };
+
+  const handleAssignDLO = (facultyId) => {
+    showToast(`Faculty ${facultyId} assigned as DLO/ILO Incharge!`);
+    addAuditLog(`Assigned faculty ${facultyId} as DLO/ILO Incharge`);
+  };
+
+  const handleSyncSlips = async () => {
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    showToast('Slips generated and synchronized successfully!');
+    addAuditLog('Generated and synchronized all slips');
+    setLoading(false);
+  };
+
+  const handleTransferAdminRole = (newAdminId) => {
+    if (window.confirm('Are you sure you want to transfer admin role? This will log you out.')) {
+      showToast('Admin role transferred successfully! Please login again.');
+      addAuditLog(`Transferred admin role to ${newAdminId}`);
+      // In a real app, this would trigger logout
+    }
+  };
+
+  const handleResetPassword = (newPassword) => {
+    if (window.confirm('Are you sure you want to reset the admin password?')) {
+      showToast('Admin password reset successfully!');
+      addAuditLog('Reset admin password');
+    }
   };
 
   const handleSync = async (type) => {
@@ -109,258 +350,71 @@ const AdminDashboard = () => {
     );
   }
 
+  const currentSection = getCurrentSection();
+
   return (
     <div className="admin-dashboard">
       <div className="admin-content">
-        {/* Admin Profile */}
-        <div className="admin-profile">
-          <div className="profile-header">
-            <div className="profile-avatar">
-              {getInitials(user.name)}
-            </div>
-            <div className="profile-info">
-              <h2>{user.name}</h2>
-              <p>{user.email}</p>
-            </div>
-          </div>
-        </div>
+        {/* Header */}
+        
 
-        {/* Stats Overview */}
-        <div className="admin-stats">
-          <div className="stat-card">
-            <div className="stat-icon">🎓</div>
-            <div className="stat-value">{stats.totalStudents}</div>
-            <div className="stat-label">Total Students</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">👥</div>
-            <div className="stat-value">{stats.totalFaculty}</div>
-            <div className="stat-label">Total Faculty</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">⏳</div>
-            <div className="stat-value">{stats.pendingApprovals}</div>
-            <div className="stat-label">Pending Approvals</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">✅</div>
-            <div className="stat-value">{stats.completedApprovals}</div>
-            <div className="stat-label">Completed Approvals</div>
-          </div>
-        </div>
+        {/* Dashboard Section */}
+        {currentSection === 'dashboard' && (
+          <Dashboard stats={stats} user={user} />
+        )}
 
-        {/* Admin Sections */}
-        <div className="admin-sections">
-          {/* Master Data Upload */}
-          <div className="admin-section">
-            <div className="section-header">
-              <h3 className="section-title">Master Data Upload</h3>
-              <p className="section-subtitle">Upload student and faculty data</p>
-            </div>
-            <div className="section-content">
-              <div className="master-data-upload">
-                <div className="upload-area" onClick={() => document.getElementById('file-input').click()}>
-                  <div className="upload-icon">📁</div>
-                  <h4 className="upload-text">Upload Data Files</h4>
-                  <p className="upload-hint">Click to select files or drag and drop</p>
-                  <input
-                    id="file-input"
-                    type="file"
-                    className="file-input"
-                    onChange={handleFileUpload}
-                    accept=".csv,.xlsx,.json"
-                  />
-                </div>
-                <button className="upload-button" onClick={() => document.getElementById('file-input').click()}>
-                  Choose Files
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Master Data Section */}
+        {currentSection === 'master-data' && (
+          <MasterData 
+            uploadHistory={uploadHistory} 
+            handleFileUpload={handleFileUpload} 
+            loading={loading} 
+          />
+        )}
 
-          {/* Faculty Role Mapping */}
-          <div className="admin-section">
-            <div className="section-header">
-              <h3 className="section-title">Faculty Role Management</h3>
-              <p className="section-subtitle">Assign roles to faculty members</p>
-            </div>
-            <div className="section-content">
-              <div className="faculty-role-mapping">
-                <div className="faculty-list">
-                  {faculty.map((facultyMember) => (
-                    <div key={facultyMember.id} className="faculty-item">
-                      <div className="faculty-info">
-                        <h4 className="faculty-name">{facultyMember.name}</h4>
-                        <p className="faculty-email">{facultyMember.email}</p>
-                      </div>
-                      <div className="faculty-roles">
-                        {['SubjectTeacher', 'Mentor', 'ClassCounsellor', 'HOD'].map((role) => (
-                          <div key={role} className="role-checkbox">
-                            <input
-                              type="checkbox"
-                              id={`${facultyMember.id}-${role}`}
-                              checked={(facultyMember.roles || []).includes(role)}
-                              onChange={(e) => handleFacultyRoleUpdate(facultyMember.id, role, e.target.checked)}
-                            />
-                            <label htmlFor={`${facultyMember.id}-${role}`}>
-                              {role}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Faculty Management Section */}
+        {currentSection === 'faculty-management' && (
+          <FacultyManagement 
+            faculty={faculty}
+            students={students}
+            subjects={subjects}
+            batches={batches}
+            handleFacultyRoleUpdate={handleFacultyRoleUpdate}
+            handleStudentSubjectUpdate={handleStudentSubjectUpdate}
+            handleAssignDLO={handleAssignDLO}
+            handleSyncSlips={handleSyncSlips}
+            loading={loading}
+          />
+        )}
 
-          {/* Student Lifecycle Management */}
-          <div className="admin-section">
-            <div className="section-header">
-              <h3 className="section-title">Student Lifecycle</h3>
-              <p className="section-subtitle">Manage student enrollment and graduation</p>
-            </div>
-            <div className="section-content">
-              <div className="student-lifecycle">
-                <div className="lifecycle-actions">
-                  <div className="lifecycle-button">
-                    <div className="lifecycle-icon">📝</div>
-                    <h4 className="lifecycle-title">Enroll Students</h4>
-                    <p className="lifecycle-description">Add new students to the system</p>
-                  </div>
-                  <div className="lifecycle-button">
-                    <div className="lifecycle-icon">🔄</div>
-                    <h4 className="lifecycle-title">Update Records</h4>
-                    <p className="lifecycle-description">Modify student information</p>
-                  </div>
-                  <div className="lifecycle-button">
-                    <div className="lifecycle-icon">🎓</div>
-                    <h4 className="lifecycle-title">Graduate Students</h4>
-                    <p className="lifecycle-description">Mark students as graduated</p>
-                  </div>
-                  <div className="lifecycle-button">
-                    <div className="lifecycle-icon">📊</div>
-                    <h4 className="lifecycle-title">Generate Reports</h4>
-                    <p className="lifecycle-description">Create student reports</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Student Management Section */}
+        {currentSection === 'student-management' && (
+          <StudentManagement 
+            students={students}
+            faculty={faculty}
+            departments={departments}
+            batches={batches}
+            handlePromoteStudents={handlePromoteStudents}
+            handleArchiveStudents={handleArchiveStudents}
+            handleFacultyReassignment={handleFacultyReassignment}
+            handleBatchTransfer={handleBatchTransfer}
+            handleUpdateHOD={handleUpdateHOD}
+          />
+        )}
 
-          {/* Data Sync */}
-          <div className="admin-section">
-            <div className="section-header">
-              <h3 className="section-title">Data Synchronization</h3>
-              <p className="section-subtitle">Sync data with external systems</p>
-            </div>
-            <div className="section-content">
-              <div className="slip-sync">
-                <div className="sync-actions">
-                  <button 
-                    className="sync-button"
-                    onClick={() => handleSync('Student Data')}
-                    disabled={loading}
-                  >
-                    Sync Student Data
-                  </button>
-                  <button 
-                    className="sync-button secondary"
-                    onClick={() => handleSync('Faculty Data')}
-                    disabled={loading}
-                  >
-                    Sync Faculty Data
-                  </button>
-                  <button 
-                    className="sync-button"
-                    onClick={() => handleSync('Approval Status')}
-                    disabled={loading}
-                  >
-                    Sync Approvals
-                  </button>
-                  <button 
-                    className="sync-button secondary"
-                    onClick={() => handleSync('All Data')}
-                    disabled={loading}
-                  >
-                    Full Sync
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Data Sync Section */}
+        {currentSection === 'data-sync' && (
+          <DataSync 
+            stats={stats}
+            students={students}
+            departments={departments}
+            filteredApprovals={filteredApprovals}
+            filters={filters}
+            setFilters={setFilters}
+            auditLogs={auditLogs}
+          />
+        )}
 
-          {/* Approval History */}
-          <div className="admin-section">
-            <div className="section-header">
-              <h3 className="section-title">Approval History</h3>
-              <p className="section-subtitle">View all approval records</p>
-            </div>
-            <div className="section-content">
-              <div className="approval-history">
-                <div className="history-filters">
-                  <select className="filter-select">
-                    <option value="all">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
-                  <select className="filter-select">
-                    <option value="all">All Students</option>
-                    {studentsData.map(student => (
-                      <option key={student.id} value={student.id}>
-                        {student.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="history-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Student</th>
-                        <th>Roll No</th>
-                        <th>Status</th>
-                        <th>Last Updated</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {approvals.map((approval) => {
-                        const student = studentsData.find(s => s.id === approval.studentId);
-                        return (
-                          <tr key={approval.id}>
-                            <td>{student?.name}</td>
-                            <td>{approval.rollNo}</td>
-                            <td>
-                              <ApprovalBadge 
-                                status={approval.hodApproval.status}
-                                timestamp={approval.hodApproval.timestamp}
-                              />
-                            </td>
-                            <td>
-                              {approval.hodApproval.timestamp 
-                                ? new Date(approval.hodApproval.timestamp).toLocaleDateString()
-                                : 'N/A'
-                              }
-                            </td>
-                            <td>
-                              <button className="btn btn-sm btn-outline">
-                                View Details
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

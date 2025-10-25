@@ -1,0 +1,44 @@
+[
+  {
+    "id": "mp1",
+    "title": "AI-Powered Learning Management System",
+    "studentId": "student1",
+    "studentName": "John Doe",
+    "supervisorId": "faculty1",
+    "supervisorName": "Dr. Smith",
+    "department": "Computer Science",
+    "semester": 7,
+    "status": "pending",
+    "description": "An intelligent LMS that adapts to student learning patterns",
+    "technologies": ["React", "Node.js", "Machine Learning", "MongoDB"],
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": "mp2",
+    "title": "Blockchain-based Voting System",
+    "studentId": "student2",
+    "studentName": "Jane Smith",
+    "supervisorId": "faculty4",
+    "supervisorName": "Dr. Wilson",
+    "department": "Computer Science",
+    "semester": 7,
+    "status": "pending",
+    "description": "A secure and transparent voting system using blockchain technology",
+    "technologies": ["Solidity", "Web3.js", "React", "Ethereum"],
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "mp3",
+    "title": "IoT-based Smart Agriculture",
+    "studentId": "student3",
+    "studentName": "Mike Johnson",
+    "supervisorId": "faculty2",
+    "supervisorName": "Dr. Brown",
+    "department": "Computer Science",
+    "semester": 7,
+    "status": "approved",
+    "description": "Smart farming solution using IoT sensors and data analytics",
+    "technologies": ["Arduino", "Python", "Machine Learning", "Cloud Computing"],
+    "createdAt": "2024-01-10T09:00:00Z"
+  }
+]

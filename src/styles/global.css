@@ -1,16 +1,42 @@
 :root {
-  /* Colors */
-  --primary-color: #2563eb;
-  --primary-dark: #1d4ed8;
-  --secondary-color: #64748b;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --background-color: #f8fafc;
-  --surface-color: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
+  /* Primary Colors - Red & White Theme */
+  --primary-color: #c9243f;        /* Red-600 */
+  --primary-dark: #c9243f;         /* Red-700 */
+  --primary-light: #ef4444;        /* Red-500 */
+  --secondary-color: #64748b;      /* Slate-500 */
+  --success-color: #10b981;         /* Emerald-500 */
+  --warning-color: #f59e0b;         /* Amber-500 */
+  --error-color: #ef4444;           /* Red-500 */
+  --background-color: #ffffff;      /* White */
+  --surface-color: #ffffff;         /* White */
+  --text-primary: #1e293b;          /* Slate-800 */
+  --text-secondary: #64748b;        /* Slate-500 */
+  --border-color: #e2e8f0;          /* Slate-200 */
+  
+  /* Red Theme Variations */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+  
+  /* White Theme Variations */
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
   
   /* Spacing */
   --spacing-xs: 0.25vw;
@@ -40,6 +66,7 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
+
 
 * {
   margin: 0;
@@ -93,6 +120,25 @@ a {
 a:hover {
   color: var(--primary-dark);
   text-decoration: underline;
+}
+
+/* Add to your global.css or components.css */
+.nav-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(89%) contrast(97%);
+}
+
+.nav-item.active .nav-icon-img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+}
+
+.nav-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Buttons */

@@ -10,6 +10,7 @@ const HODDashboard = () => {
   const { user } = useAuth();
   const [approvals, setApprovals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('overview');
   const [showHistory, setShowHistory] = useState(false);
   const [selectedApproval, setSelectedApproval] = useState(null);
 
@@ -134,95 +135,156 @@ const HODDashboard = () => {
 
   return (
     <div className="faculty-dashboard">
+      {/* Sidebar Navigation */}
+      <div className="faculty-sidebar">
+        <div className="sidebar-header">
+          <h2>HOD Dashboard</h2>
+        </div>
+        <nav className="sidebar-nav">
+          <button 
+            className={`nav-item ${activeSection === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveSection('overview')}
+          >
+            📊 Overview
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'approvals' ? 'active' : ''}`}
+            onClick={() => setActiveSection('approvals')}
+          >
+            ✅ Final Approvals
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'reports' ? 'active' : ''}`}
+            onClick={() => setActiveSection('reports')}
+          >
+            📈 Reports
+          </button>
+        </nav>
+      </div>
+
       <div className="faculty-content">
-        {/* HOD Profile Section */}
-        <div className="faculty-profile">
-          <div className="profile-header">
-            <div className="profile-avatar">
-              {getInitials(user.name)}
-            </div>
-            <div className="profile-info">
-              <h2>{user.name}</h2>
-              <p>{user.email}</p>
-              <div className="roles-badges">
-                <span className="role-badge">HOD</span>
-              </div>
-            </div>
+        {/* Header */}
+        <div className="faculty-header">
+          <h1>HOD Dashboard</h1>
+          <div className="faculty-user-info">
+            <span>Welcome, {user.name}</span>
+            <button className="logout-btn">Logout</button>
           </div>
         </div>
 
-        {/* Final Approvals Section */}
-        <div className="mentor-section">
-          <div className="mentor-header">
-            <div className="mentor-icon">🎓</div>
-            <div>
-              <h3 className="mentor-title">Final HOD Approvals</h3>
-              <p className="mentor-subtitle">Final approval for student slips</p>
+        {/* Overview Section */}
+        {activeSection === 'overview' && (
+          <div className="section">
+            {/* HOD Profile Section */}
+            <div className="faculty-profile">
+              <div className="profile-header">
+                <div className="profile-avatar">
+                  {getInitials(user.name)}
+                </div>
+                <div className="profile-info">
+                  <h2>{user.name}</h2>
+                  <p>{user.email}</p>
+                  <div className="roles-badges">
+                    <span className="role-badge">HOD</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="mentor-students">
-            {approvals
-              .filter(approval => canApproveHOD(approval))
-              .map((approval) => {
-                const student = studentsData.find(s => s.id === approval.studentId);
-                
-                return (
-                  <div key={approval.id} className="mentor-student-card">
-                    <div className="mentor-student-header">
-                      <div className="mentor-student-info">
-                        <h4>{student.name}</h4>
-                        <div className="mentor-student-details">
-                          <span>{student.rollNo}</span>
-                          <span>{student.USN}</span>
+        )}
+
+        {/* Approvals Section */}
+        {activeSection === 'approvals' && (
+          <div className="section">
+
+            {/* Final Approvals Section */}
+            <div className="mentor-section">
+              <div className="mentor-header">
+                <div className="mentor-icon">🎓</div>
+                <div>
+                  <h3 className="mentor-title">Final HOD Approvals</h3>
+                  <p className="mentor-subtitle">Final approval for student slips</p>
+                </div>
+              </div>
+              
+              <div className="mentor-students">
+                {approvals
+                  .filter(approval => canApproveHOD(approval))
+                  .map((approval) => {
+                    const student = studentsData.find(s => s.id === approval.studentId);
+                    
+                    return (
+                      <div key={approval.id} className="mentor-student-card">
+                        <div className="mentor-student-header">
+                          <div className="mentor-student-info">
+                            <h4>{student.name}</h4>
+                            <div className="mentor-student-details">
+                              <span>{student.rollNo}</span>
+                              <span>{student.USN}</span>
+                            </div>
+                          </div>
+                          <div className="approval-status pending">
+                            HOD Approval Required
+                          </div>
+                        </div>
+                        
+                        <div className="mentor-requirements">
+                          <h4 className="requirements-title">Approval Chain Status</h4>
+                          <ul className="requirements-list">
+                            <li className="completed">All Subject Approvals</li>
+                            <li className="completed">Mini Project Approval</li>
+                            <li className="completed">Mentor Approval</li>
+                            <li className="completed">Counsellor Approval</li>
+                            <li className="pending">HOD Final Approval</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="approval-actions">
+                          <button
+                            className="reject-button"
+                            onClick={() => handleHODApproval(approval.id, 'rejected')}
+                            disabled={loading}
+                          >
+                            Reject
+                          </button>
+                          <button
+                            className="approve-button"
+                            onClick={() => handleHODApproval(approval.id, 'approved')}
+                            disabled={loading}
+                          >
+                            Final Approve
+                          </button>
+                          <button
+                            className="btn btn-outline"
+                            onClick={() => {
+                              setSelectedApproval(approval);
+                              setShowHistory(true);
+                            }}
+                          >
+                            View History
+                          </button>
                         </div>
                       </div>
-                      <div className="approval-status pending">
-                        HOD Approval Required
-                      </div>
-                    </div>
-                    
-                    <div className="mentor-requirements">
-                      <h4 className="requirements-title">Approval Chain Status</h4>
-                      <ul className="requirements-list">
-                        <li className="completed">All Subject Approvals</li>
-                        <li className="completed">Mini Project Approval</li>
-                        <li className="completed">Mentor Approval</li>
-                        <li className="completed">Counsellor Approval</li>
-                        <li className="pending">HOD Final Approval</li>
-                      </ul>
-                    </div>
-                    
-                    <div className="approval-actions">
-                      <button
-                        className="reject-button"
-                        onClick={() => handleHODApproval(approval.id, 'rejected')}
-                        disabled={loading}
-                      >
-                        Reject
-                      </button>
-                      <button
-                        className="approve-button"
-                        onClick={() => handleHODApproval(approval.id, 'approved')}
-                        disabled={loading}
-                      >
-                        Final Approve
-                      </button>
-                      <button
-                        className="btn btn-outline"
-                        onClick={() => {
-                          setSelectedApproval(approval);
-                          setShowHistory(true);
-                        }}
-                      >
-                        View History
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Reports Section */}
+        {activeSection === 'reports' && (
+          <div className="section">
+            <h2>HOD Reports</h2>
+            <div className="reports-grid">
+              <div className="report-card">
+                <h3>Approval Statistics</h3>
+                <p>Total Pending: {approvals.length}</p>
+                <p>Ready for Approval: {approvals.filter(a => canApproveHOD(a)).length}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Approval History Modal */}
         {showHistory && selectedApproval && (

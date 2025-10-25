@@ -1,0 +1,29 @@
+[
+  {
+    "deptId": "CS",
+    "deptName": "Computer Science",
+    "hodId": "faculty3",
+    "hodName": "Prof. Johnson",
+    "divisions": ["A", "B", "C"],
+    "totalStudents": 120,
+    "totalFaculty": 15
+  },
+  {
+    "deptId": "IT",
+    "deptName": "Information Technology",
+    "hodId": "faculty5",
+    "hodName": "Dr. Davis",
+    "divisions": ["A", "B"],
+    "totalStudents": 80,
+    "totalFaculty": 10
+  },
+  {
+    "deptId": "EC",
+    "deptName": "Electronics & Communication",
+    "hodId": "faculty6",
+    "hodName": "Dr. Miller",
+    "divisions": ["A", "B", "C", "D"],
+    "totalStudents": 160,
+    "totalFaculty": 20
+  }
+]

@@ -12,6 +12,7 @@ const StudentDashboard = () => {
   const [approval, setApproval] = useState(null);
   const [slipGenerated, setSlipGenerated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('overview');
 
   useEffect(() => {
     // Find student data
@@ -86,81 +87,137 @@ const StudentDashboard = () => {
 
   return (
     <div className="student-dashboard">
+      {/* Sidebar Navigation */}
+      <div className="student-sidebar">
+        <div className="sidebar-header">
+          <h2>Student Dashboard</h2>
+        </div>
+        <nav className="sidebar-nav">
+          <button 
+            className={`nav-item ${activeSection === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveSection('overview')}
+          >
+            📊 Overview
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'subjects' ? 'active' : ''}`}
+            onClick={() => setActiveSection('subjects')}
+          >
+            📚 My Subjects
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'slip' ? 'active' : ''}`}
+            onClick={() => setActiveSection('slip')}
+          >
+            📄 Slip Generation
+          </button>
+          <button 
+            className={`nav-item ${activeSection === 'status' ? 'active' : ''}`}
+            onClick={() => setActiveSection('status')}
+          >
+            ✅ Approval Status
+          </button>
+        </nav>
+      </div>
+
       <div className="student-content">
-        {/* Profile Section */}
-        <div className="student-profile">
-          <div className="profile-header">
-            <div className="profile-avatar">
-              {getInitials(student.name)}
-            </div>
-            <div className="profile-info">
-              <h2>{student.name}</h2>
-              <p>{student.email}</p>
-            </div>
-          </div>
-          
-          <div className="profile-details">
-            <div className="detail-group">
-              <span className="detail-label">Roll Number</span>
-              <span className="detail-value">{student.rollNo}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">USN</span>
-              <span className="detail-value">{student.USN}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Contact</span>
-              <span className="detail-value">{student.contact}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Department</span>
-              <span className="detail-value">{student.deptId}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Year</span>
-              <span className="detail-value">{student.year}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Semester</span>
-              <span className="detail-value">{student.sem}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Division</span>
-              <span className="detail-value">{student.divId}</span>
-            </div>
-            <div className="detail-group">
-              <span className="detail-label">Batch</span>
-              <span className="detail-value">{student.batchId}</span>
-            </div>
+        {/* Header */}
+        <div className="student-header">
+          <h1>Student Dashboard</h1>
+          <div className="student-user-info">
+            <span>Welcome, {user.name}</span>
+            <button className="logout-btn">Logout</button>
           </div>
         </div>
+
+        {/* Overview Section */}
+        {activeSection === 'overview' && (
+          <div className="section">
+            {/* Profile Section */}
+            <div className="student-profile">
+              <div className="profile-header">
+                <div className="profile-avatar">
+                  {getInitials(student.name)}
+                </div>
+                <div className="profile-info">
+                  <h2>{student.name}</h2>
+                  <p>{student.email}</p>
+                </div>
+              </div>
+          
+              <div className="profile-details">
+                <div className="detail-group">
+                  <span className="detail-label">Roll Number</span>
+                  <span className="detail-value">{student.rollNo}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">USN</span>
+                  <span className="detail-value">{student.USN}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Contact</span>
+                  <span className="detail-value">{student.contact}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Department</span>
+                  <span className="detail-value">{student.deptId}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Year</span>
+                  <span className="detail-value">{student.year}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Semester</span>
+                  <span className="detail-value">{student.sem}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Division</span>
+                  <span className="detail-value">{student.divId}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="detail-label">Batch</span>
+                  <span className="detail-value">{student.batchId}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Subjects Section */}
-        <div className="subjects-section">
-          <h3>Enrolled Subjects</h3>
-          <div className="subjects-grid">
-            {student.subjects.map((subject) => (
-              <div key={subject.subjectId} className="subject-card">
-                <h4 className="subject-name">{subject.subjectName}</h4>
-                <p className="subject-code">{subject.subjectId}</p>
-                <p className="subject-credits">{subject.credits} Credits</p>
+        {activeSection === 'subjects' && (
+          <div className="section">
+            {/* Subjects Section */}
+            <div className="subjects-section">
+              <h3>Enrolled Subjects</h3>
+              <div className="subjects-grid">
+                {student.subjects.map((subject) => (
+                  <div key={subject.subjectId} className="subject-card">
+                    <h4 className="subject-name">{subject.subjectName}</h4>
+                    <p className="subject-code">{subject.subjectId}</p>
+                    <p className="subject-credits">{subject.credits} Credits</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Mini Project Section */}
-        <div className="mini-project-section">
-          <h3>Mini Project</h3>
-          <div className="mini-project-card">
-            <h4 className="project-title">{student.miniProject.title}</h4>
-            <p className="project-supervisor">Supervisor: {student.miniProject.supervisor}</p>
+            {/* Mini Project Section */}
+            <div className="mini-project-section">
+              <h3>Mini Project</h3>
+              <div className="mini-project-card">
+                <h4 className="project-title">{student.miniProject.title}</h4>
+                <p className="project-supervisor">Supervisor: {student.miniProject.supervisor}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Slip Generation Section */}
-        <div className="slip-generation">
-          <h3>Slip Generation</h3>
+        {activeSection === 'slip' && (
+          <div className="section">
+
+            {/* Slip Generation Section */}
+            <div className="slip-generation">
+              <h3>Slip Generation</h3>
           
           <div className="slip-status">
             <div className={`slip-status-icon ${canGenerateSlip() ? 'ready' : 'pending'}`}>
@@ -215,114 +272,167 @@ const StudentDashboard = () => {
             {slipGenerated ? 'Slip Generated ✓' : 'Generate Slip'}
           </button>
 
-          {slipGenerated && (
-            <div className="slip-preview">
-              <div className="slip-header">
-                <h2 className="slip-title">IDCS - College Slip</h2>
-                <p className="slip-subtitle">Digital Approval System</p>
-              </div>
-              
-              <div className="slip-content">
-                <div className="slip-section">
-                  <h4>Student Information</h4>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Name:</span>
-                    <span className="slip-field-value">{student.name}</span>
+              {slipGenerated && (
+                <div className="slip-preview">
+                  <div className="slip-header">
+                    <h2 className="slip-title">IDCS - College Slip</h2>
+                    <p className="slip-subtitle">Digital Approval System</p>
                   </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Roll No:</span>
-                    <span className="slip-field-value">{student.rollNo}</span>
+                  
+                  <div className="slip-content">
+                    <div className="slip-section">
+                      <h4>Student Information</h4>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Name:</span>
+                        <span className="slip-field-value">{student.name}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Roll No:</span>
+                        <span className="slip-field-value">{student.rollNo}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">USN:</span>
+                        <span className="slip-field-value">{student.USN}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Department:</span>
+                        <span className="slip-field-value">{student.deptId}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Year:</span>
+                        <span className="slip-field-value">{student.year}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Semester:</span>
+                        <span className="slip-field-value">{student.sem}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="slip-section">
+                      <h4>Academic Details</h4>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Division:</span>
+                        <span className="slip-field-value">{student.divId}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Batch:</span>
+                        <span className="slip-field-value">{student.batchId}</span>
+                      </div>
+                      <div className="slip-field">
+                        <span className="slip-field-label">Generated:</span>
+                        <span className="slip-field-value">{new Date().toLocaleDateString()}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">USN:</span>
-                    <span className="slip-field-value">{student.USN}</span>
-                  </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Department:</span>
-                    <span className="slip-field-value">{student.deptId}</span>
-                  </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Year:</span>
-                    <span className="slip-field-value">{student.year}</span>
-                  </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Semester:</span>
-                    <span className="slip-field-value">{student.sem}</span>
+                  
+                  <div className="slip-approvals">
+                    <h4>Approval Chain</h4>
+                    <div className="approvals-grid">
+                      {approval.subjectApprovals.map((subApproval) => (
+                        <div key={subApproval.subjectId} className="approval-item">
+                          <div className="approval-role">{subApproval.subjectName}</div>
+                          <div className="approval-signature">
+                            {subApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
+                          </div>
+                          <div className="approval-timestamp">
+                            {subApproval.timestamp ? new Date(subApproval.timestamp).toLocaleDateString() : 'N/A'}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="approval-item">
+                        <div className="approval-role">Mini Project</div>
+                        <div className="approval-signature">
+                          {approval.miniProjectApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
+                        </div>
+                        <div className="approval-timestamp">
+                          {approval.miniProjectApproval.timestamp ? new Date(approval.miniProjectApproval.timestamp).toLocaleDateString() : 'N/A'}
+                        </div>
+                      </div>
+                      <div className="approval-item">
+                        <div className="approval-role">Mentor</div>
+                        <div className="approval-signature">
+                          {approval.mentorApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
+                        </div>
+                        <div className="approval-timestamp">
+                          {approval.mentorApproval.timestamp ? new Date(approval.mentorApproval.timestamp).toLocaleDateString() : 'N/A'}
+                        </div>
+                      </div>
+                      <div className="approval-item">
+                        <div className="approval-role">Counsellor</div>
+                        <div className="approval-signature">
+                          {approval.counsellorApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
+                        </div>
+                        <div className="approval-timestamp">
+                          {approval.counsellorApproval.timestamp ? new Date(approval.counsellorApproval.timestamp).toLocaleDateString() : 'N/A'}
+                        </div>
+                      </div>
+                      <div className="approval-item">
+                        <div className="approval-role">HOD</div>
+                        <div className="approval-signature">
+                          {approval.hodApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
+                        </div>
+                        <div className="approval-timestamp">
+                          {approval.hodApproval.timestamp ? new Date(approval.hodApproval.timestamp).toLocaleDateString() : 'N/A'}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="slip-section">
-                  <h4>Academic Details</h4>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Division:</span>
-                    <span className="slip-field-value">{student.divId}</span>
-                  </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Batch:</span>
-                    <span className="slip-field-value">{student.batchId}</span>
-                  </div>
-                  <div className="slip-field">
-                    <span className="slip-field-label">Generated:</span>
-                    <span className="slip-field-value">{new Date().toLocaleDateString()}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="slip-approvals">
-                <h4>Approval Chain</h4>
-                <div className="approvals-grid">
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Status Section */}
+        {activeSection === 'status' && (
+          <div className="section">
+            <h2>Approval Status</h2>
+            {approval && (
+              <div className="approval-status-section">
+                <h3>Current Status</h3>
+                <div className="status-grid">
                   {approval.subjectApprovals.map((subApproval) => (
-                    <div key={subApproval.subjectId} className="approval-item">
-                      <div className="approval-role">{subApproval.subjectName}</div>
-                      <div className="approval-signature">
-                        {subApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
-                      </div>
-                      <div className="approval-timestamp">
-                        {subApproval.timestamp ? new Date(subApproval.timestamp).toLocaleDateString() : 'N/A'}
-                      </div>
+                    <div key={subApproval.subjectId} className="status-item">
+                      <h4>{subApproval.subjectName}</h4>
+                      <ApprovalBadge 
+                        status={subApproval.status}
+                        timestamp={subApproval.timestamp}
+                      />
                     </div>
                   ))}
-                  <div className="approval-item">
-                    <div className="approval-role">Mini Project</div>
-                    <div className="approval-signature">
-                      {approval.miniProjectApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
-                    </div>
-                    <div className="approval-timestamp">
-                      {approval.miniProjectApproval.timestamp ? new Date(approval.miniProjectApproval.timestamp).toLocaleDateString() : 'N/A'}
-                    </div>
+                  <div className="status-item">
+                    <h4>Mini Project</h4>
+                    <ApprovalBadge 
+                      status={approval.miniProjectApproval.status}
+                      timestamp={approval.miniProjectApproval.timestamp}
+                    />
                   </div>
-                  <div className="approval-item">
-                    <div className="approval-role">Mentor</div>
-                    <div className="approval-signature">
-                      {approval.mentorApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
-                    </div>
-                    <div className="approval-timestamp">
-                      {approval.mentorApproval.timestamp ? new Date(approval.mentorApproval.timestamp).toLocaleDateString() : 'N/A'}
-                    </div>
+                  <div className="status-item">
+                    <h4>Mentor Approval</h4>
+                    <ApprovalBadge 
+                      status={approval.mentorApproval.status}
+                      timestamp={approval.mentorApproval.timestamp}
+                    />
                   </div>
-                  <div className="approval-item">
-                    <div className="approval-role">Counsellor</div>
-                    <div className="approval-signature">
-                      {approval.counsellorApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
-                    </div>
-                    <div className="approval-timestamp">
-                      {approval.counsellorApproval.timestamp ? new Date(approval.counsellorApproval.timestamp).toLocaleDateString() : 'N/A'}
-                    </div>
+                  <div className="status-item">
+                    <h4>Counsellor Approval</h4>
+                    <ApprovalBadge 
+                      status={approval.counsellorApproval.status}
+                      timestamp={approval.counsellorApproval.timestamp}
+                    />
                   </div>
-                  <div className="approval-item">
-                    <div className="approval-role">HOD</div>
-                    <div className="approval-signature">
-                      {approval.hodApproval.status === 'approved' ? '✓ Approved' : '○ Pending'}
-                    </div>
-                    <div className="approval-timestamp">
-                      {approval.hodApproval.timestamp ? new Date(approval.hodApproval.timestamp).toLocaleDateString() : 'N/A'}
-                    </div>
+                  <div className="status-item">
+                    <h4>HOD Approval</h4>
+                    <ApprovalBadge 
+                      status={approval.hodApproval.status}
+                      timestamp={approval.hodApproval.timestamp}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

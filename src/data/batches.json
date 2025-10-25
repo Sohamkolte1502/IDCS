@@ -1,0 +1,38 @@
+[
+  {
+    "batchId": "2020",
+    "year": 2024,
+    "sem": 7,
+    "deptId": "CS",
+    "totalStudents": 40,
+    "divisions": ["A", "B"],
+    "status": "active"
+  },
+  {
+    "batchId": "2021",
+    "year": 2024,
+    "sem": 5,
+    "deptId": "CS",
+    "totalStudents": 45,
+    "divisions": ["A", "B"],
+    "status": "active"
+  },
+  {
+    "batchId": "2022",
+    "year": 2024,
+    "sem": 3,
+    "deptId": "CS",
+    "totalStudents": 50,
+    "divisions": ["A", "B", "C"],
+    "status": "active"
+  },
+  {
+    "batchId": "2019",
+    "year": 2024,
+    "sem": 8,
+    "deptId": "CS",
+    "totalStudents": 35,
+    "divisions": ["A", "B"],
+    "status": "graduating"
+  }
+]

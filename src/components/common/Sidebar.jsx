@@ -26,11 +26,11 @@ const Sidebar = () => {
   ];
 
   const getAdminNavItems = () => [
-    { path: '/admin', label: 'Dashboard', icon: '🏠' },
-    { path: '/admin/master-data', label: 'Master Data', icon: '📊' },
-    { path: '/admin/faculty', label: 'Faculty Management', icon: '👥' },
-    { path: '/admin/students', label: 'Student Management', icon: '🎓' },
-    { path: '/admin/sync', label: 'Data Sync', icon: '🔄' }
+    { path: '/admin', label: 'Dashboard', icon: '/dashboard.svg' },
+    { path: '/admin/master-data', label: 'Master Data', icon: '/data.svg' },
+    { path: '/admin/faculty', label: 'Faculty Management', icon: '/management.svg' },
+    { path: '/admin/students', label: 'Student Management', icon: '/student.svg' },
+    { path: '/admin/sync', label: 'Data Sync', icon: '/sync.svg' }
   ];
 
   const getOfficeNavItems = () => [
@@ -58,6 +58,17 @@ const Sidebar = () => {
 
   const navItems = getNavItems();
 
+  // Helper function to render icon
+  const renderIcon = (icon) => {
+    if (icon.startsWith('/')) {
+      // SVG file from public folder
+      return <img src={icon} alt="" className="nav-icon-img" />;
+    } else {
+      // Emoji or text icon
+      return <span className="nav-icon">{icon}</span>;
+    }
+  };
+
   return (
     <nav className="sidebar">
       <div className="sidebar-nav">
@@ -69,7 +80,7 @@ const Sidebar = () => {
               to={item.path}
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
             >
-              <span className="nav-icon">{item.icon}</span>
+              {renderIcon(item.icon)}
               <span className="nav-text">{item.label}</span>
             </Link>
           ))}
