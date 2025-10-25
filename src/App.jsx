@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import StudentDashboard from './pages/StudentDashboard';
 import FacultyDashboard from './pages/FacultyDashboard';
 import HODDashboard from './pages/HODDashboard';
+import HODApprovals from './pages/HODApprovals';
+import HODHistory from './pages/HODHistory';
 import AdminDashboard from './pages/AdminDashboard';
 import OfficeInterface from './pages/OfficeInterface';
 import './styles/global.css';
@@ -107,8 +109,8 @@ const AppRoutes = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<HODDashboard />} />
-              <Route path="/approvals" element={<HODDashboard />} />
-              <Route path="/history" element={<HODDashboard />} />
+              <Route path="/approvals" element={<HODApprovals />} />
+              <Route path="/history" element={<HODHistory />} />
             </Routes>
           </Layout>
         </ProtectedRoute>
