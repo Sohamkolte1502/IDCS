@@ -874,6 +874,117 @@
   color: #dc2626;
 }
 
+/* System Admin Styles */
+.system-admins-section {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.system-admins-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.system-admin-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.system-admin-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.system-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.system-admin-header h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.admin-edit-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  padding: var(--spacing-xs);
+  transition: all 0.2s ease;
+}
+
+.admin-edit-icon:hover {
+  transform: scale(1.1);
+}
+
+.admin-edit-container {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  width: 100%;
+}
+
+.admin-name-input {
+  flex: 1;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.admin-edit-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.admin-save-btn,
+.admin-cancel-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.admin-save-btn:hover {
+  background: var(--primary-dark);
+}
+
+.admin-cancel-btn {
+  background: #dc2626;
+}
+
+.admin-cancel-btn:hover {
+  background: #b91c1c;
+}
+
+.admin-email {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-sidebar {

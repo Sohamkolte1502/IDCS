@@ -59,6 +59,13 @@ const AdminDashboard = () => {
     division: 'all',
     year: 'all'
   });
+  const [systemAdmins, setSystemAdmins] = useState(() => {
+    const saved = localStorage.getItem('systemAdmins');
+    return saved ? JSON.parse(saved) : {
+      systemAdmin1: { name: 'System Admin 1', email: 'admin1@dypatil.edu' },
+      systemAdmin2: { name: 'System Admin 2', email: 'admin2@dypatil.edu' }
+    };
+  });
 
   useEffect(() => {
     // Initialize data
@@ -328,6 +335,22 @@ const AdminDashboard = () => {
     setLoading(false);
   };
 
+  const handleUpdateSystemAdmin = (admin, newName) => {
+    setSystemAdmins(prev => {
+      const updated = {
+        ...prev,
+        [admin]: {
+          ...prev[admin],
+          name: newName
+        }
+      };
+      localStorage.setItem('systemAdmins', JSON.stringify(updated));
+      return updated;
+    });
+    showToast('System admin name updated successfully!');
+    addAuditLog(`Updated ${admin} name to "${newName}"`);
+  };
+
   const getInitials = (name) => {
     return name
       .split(' ')
@@ -360,7 +383,12 @@ const AdminDashboard = () => {
 
         {/* Dashboard Section */}
         {currentSection === 'dashboard' && (
-          <Dashboard stats={stats} user={user} />
+          <Dashboard 
+            stats={stats} 
+            user={user}
+            systemAdmins={systemAdmins}
+            onUpdateSystemAdmin={handleUpdateSystemAdmin}
+          />
         )}
 
         {/* Master Data Section */}
